@@ -1,5 +1,5 @@
 # ─── Global ───────────────────────────────────────────────────────────────────
-aws_region   = "ap-south-1"
+aws_region   = "us-east-1"
 project_name = "myapp"
 environment  = "dev"
 owner        = "lokesh"
@@ -8,8 +8,8 @@ owner        = "lokesh"
 ami_id              = "ami-0f58b397bc5c1f2e8"   # Amazon Linux 2023, ap-south-1
 instance_type       = "t3.micro"
 key_name            = "my-keypair"
-subnet_id           = "subnet-xxxxxxxxxxxxxxxxx"
-vpc_id              = "vpc-xxxxxxxxxxxxxxxxx"
+subnet_id           = "subnet-0f5cee9681c2736b1"
+vpc_id              = "vpc-0188491b1a7750192"
 associate_public_ip = false
 root_volume_size    = 20
 
