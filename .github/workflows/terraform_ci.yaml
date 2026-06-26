@@ -5,15 +5,10 @@ on:
     branches:
       - main
       - develop
-    paths:
-      - "terraform/**"
-      - ".github/workflows/terraform_ci.yaml"
 
   pull_request:
     branches:
       - main
-    paths:
-      - "terraform/**"
 
   workflow_dispatch:
 
@@ -25,23 +20,24 @@ permissions:
 env:
   AWS_REGION: us-east-1
   TF_VERSION: "1.12.2"
-  TF_WORKING_DIR: terraform
 
 jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ${{ env.TF_WORKING_DIR }}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4.2.0
+      - name: Show Repository Structure
+        run: |
+          pwd
+          ls -la
+          find . -maxdepth 2 -type f
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
@@ -55,11 +51,11 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Terraform Format Check
-        run: terraform fmt -check -recursive
-
       - name: Terraform Init
         run: terraform init
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
 
       - name: Terraform Validate
         run: terraform validate
@@ -71,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan
-          path: terraform/tfplan
+          path: tfplan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
